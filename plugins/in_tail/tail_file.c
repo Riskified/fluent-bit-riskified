@@ -795,7 +795,8 @@ int flb_tail_file_append(char *path, struct stat *st, int mode,
     size_t tag_len;
     struct flb_tail_file *file;
     struct stat lst;
-
+    flb_sds_t inode_str;
+    
     if (!S_ISREG(st->st_mode)) {
         return -1;
     }
