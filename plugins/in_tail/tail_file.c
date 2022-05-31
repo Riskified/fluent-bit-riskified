@@ -882,35 +882,32 @@ int flb_tail_file_append(char *path, struct stat *st, int mode,
     file->skip_warn = FLB_FALSE;
 
     /* Multiline core mode */
-    // if (ctx->ml_ctx) {
-    flb_info("using built version");
-    flb_plg_info("using built version");
-    fprintf("using built version");
-    /*
-        * Create inode str to get stream_id.
-        *
-        * If stream_id is created by filename,
-        * it will be same after file rotation and it causes invalid destruction.
-        * https://github.com/fluent/fluent-bit/issues/4190
-        *
-        */
-    inode_str = flb_sds_create_size(64);
-    flb_sds_printf(&inode_str, "%"PRIu64, file->inode);
-    /* Create a stream for this file */
-    ret = flb_ml_stream_create(ctx->ml_ctx,
-                                inode_str, flb_sds_len(inode_str),
-                                ml_flush_callback, file,
-                                &stream_id);
-    if (ret != 0) {
-        flb_plg_error(ctx->ins,
-                        "could not create multiline stream for file: %s",
-                        inode_str);
+    if (ctx->ml_ctx) {
+        /*
+            * Create inode str to get stream_id.
+            *
+            * If stream_id is created by filename,
+            * it will be same after file rotation and it causes invalid destruction.
+            * https://github.com/fluent/fluent-bit/issues/4190
+            *
+            */
+        inode_str = flb_sds_create_size(64);
+        flb_sds_printf(&inode_str, "%"PRIu64, file->inode);
+        /* Create a stream for this file */
+        ret = flb_ml_stream_create(ctx->ml_ctx,
+                                    inode_str, flb_sds_len(inode_str),
+                                    ml_flush_callback, file,
+                                    &stream_id);
+        if (ret != 0) {
+            flb_plg_error(ctx->ins,
+                            "could not create multiline stream for file: %s",
+                            inode_str);
+            flb_sds_destroy(inode_str);
+            goto error;
+        }
+        file->ml_stream_id = stream_id;
         flb_sds_destroy(inode_str);
-        goto error;
     }
-    file->ml_stream_id = stream_id;
-    flb_sds_destroy(inode_str);
-    // }
 
     /* Local buffer */
     file->buf_size = ctx->buf_chunk_size;
