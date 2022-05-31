@@ -26,7 +26,7 @@ RUN apt-get update && \
     flex \
     bison
 
-ADD fluent-bit.tar.gz /tmp/fluent-bit.tar.gz
+COPY fluent-bit.tar.gz /tmp/fluent-bit.tar.gz
 
 RUN cd tmp/ && mkdir fluent-bit \
     && tar zxfv fluent-bit.tar.gz -C ./fluent-bit --strip-components=1 \
