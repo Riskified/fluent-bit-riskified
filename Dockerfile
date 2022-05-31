@@ -6,7 +6,13 @@ ENV FLB_MINOR 8
 ENV FLB_PATCH 4
 ENV FLB_VERSION 1.8.4
 
+ARG FLB_TARBALL=https://github.com/fluent/fluent-bit/archive/v$FLB_VERSION.tar.gz
+ENV FLB_SOURCE $FLB_TARBALL
 RUN mkdir -p /fluent-bit/bin /fluent-bit/etc /fluent-bit/log /tmp/fluent-bit-master/
+
+ENV DEBIAN_FRONTEND noninteractive
+
+COPY fluent-bit.tar.gz /tmp/fluent-bit.tar.gz
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -24,23 +30,19 @@ RUN apt-get update && \
     libpq-dev \
     postgresql-server-dev-all \
     flex \
-    bison
-
-
-RUN cd tmp/ && mkdir fluent-bit
-COPY fluent-bit.tar.gz /tmp/fluent-bit/fluent-bit.tar.gz
-
-RUN tar zxfv tmp/fluent-bit/fluent-bit.tar.gz -C /tmp/fluent-bit --strip-components=1 \
+    bison \
+    && cd tmp/ && mkdir fluent-bit \
+    && tar zxfv fluent-bit.tar.gz -C ./fluent-bit --strip-components=1 \
+    && cd fluent-bit/build/ \
     && rm -rf /tmp/fluent-bit/build/*
 
-WORKDIR /tmp/fluent-bit/build
+WORKDIR /tmp/fluent-bit/build/
 RUN cmake -DFLB_RELEASE=On \
           -DFLB_TRACE=Off \
           -DFLB_JEMALLOC=On \
           -DFLB_TLS=On \
           -DFLB_SHARED_LIB=Off \
           -DFLB_EXAMPLES=Off \
-          -DFLB_METRICS=On \
           -DFLB_HTTP_SERVER=On \
           -DFLB_IN_SYSTEMD=On \
           -DFLB_OUT_KAFKA=On \
