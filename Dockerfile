@@ -28,8 +28,8 @@ RUN apt-get update && \
 
 COPY fluent-bit.tar.gz /tmp/fluent-bit.tar.gz
 
-RUN cd tmp/ && mkdir fluent-bit && pwd && ls -l \
-    && tar zxfv fluent-bit.tar.gz -C ./fluent-bit --strip-components=1 \
+RUN cd tmp/ && mkdir fluent-bit && cd fluent-bit \
+    && tar zxfv fluent-bit.tar.gz \
     && pwd && ls -l fluent-bit/ \
     && cd fluent-bit/build/ \
     && rm -rf /tmp/fluent-bit/build/*
