@@ -40,6 +40,7 @@ RUN cmake -DFLB_RELEASE=On \
           -DFLB_TLS=On \
           -DFLB_SHARED_LIB=Off \
           -DFLB_EXAMPLES=Off \
+          -DFLB_METRICS=On \
           -DFLB_HTTP_SERVER=On \
           -DFLB_IN_SYSTEMD=On \
           -DFLB_OUT_KAFKA=On \
