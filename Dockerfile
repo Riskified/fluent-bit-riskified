@@ -32,8 +32,6 @@ COPY fluent-bit.tar.gz /tmp/fluent-bit/fluent-bit.tar.gz
 WORKDIR /tmp/fluent-bit/
 
 RUN tar zxfv fluent-bit.tar.gz \
-    && pwd && ls -l fluent-bit/ \
-    && cd fluent-bit/build/ \
     && rm -rf /tmp/fluent-bit/build/*
 
 RUN cd build && cmake -DFLB_RELEASE=On \
