@@ -27,14 +27,14 @@ RUN apt-get update && \
     bison
 
 
-RUN cd tmp/ && mkdir fluent-bit && cd fluent-bit
+RUN cd tmp/ && mkdir fluent-bit
 COPY fluent-bit.tar.gz /tmp/fluent-bit/fluent-bit.tar.gz
-WORKDIR /tmp/fluent-bit/
 
-RUN tar zxfv fluent-bit.tar.gz \
+RUN cd /tmp/fluent-bit && tar zxfv fluent-bit.tar.gz \
     && rm -rf /tmp/fluent-bit/build/*
 
-RUN cd build && cmake -DFLB_RELEASE=On \
+WORKDIR /tmp/fluent-bit/build
+RUN cmake -DFLB_RELEASE=On \
           -DFLB_TRACE=Off \
           -DFLB_JEMALLOC=On \
           -DFLB_TLS=On \
