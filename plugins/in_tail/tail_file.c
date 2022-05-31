@@ -884,6 +884,8 @@ int flb_tail_file_append(char *path, struct stat *st, int mode,
     /* Multiline core mode */
     if (ctx->ml_ctx) {
         flb_info("using built version");
+        flb_plg_info("using built version");
+        fprintf("using built version");
         /*
          * Create inode str to get stream_id.
          *
