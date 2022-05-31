@@ -30,7 +30,7 @@ RUN apt-get update && \
 RUN cd tmp/ && mkdir fluent-bit
 COPY fluent-bit.tar.gz /tmp/fluent-bit/fluent-bit.tar.gz
 
-RUN tar zxfv fluent-bit.tar.gz -C /tmp/fluent-bit --strip-components=1 \
+RUN tar zxfv tmp/fluent-bit/fluent-bit.tar.gz -C /tmp/fluent-bit --strip-components=1 \
     && rm -rf /tmp/fluent-bit/build/*
 
 WORKDIR /tmp/fluent-bit/build
